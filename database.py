@@ -1,23 +1,18 @@
-#manera sincrona 
-#from sqlalchemy import create_engine, MetaData
-
-#DATABASE_URL = "mysql+pymysql://root@localhost/default"  # Ajusta tus credenciales
-
-#engine = create_engine(DATABASE_URL)
-#metadata = MetaData()
-
-
-#manero asíncrona
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.orm import declarative_base
 import os
 
-# Conexión asíncrona con asyncmy (MySQL)
-DATABASE_URL = "mysql+asyncmy://root:@localhost/default?charset=utf8mb4"
+DB_USER = os.getenv('DB_USER', 'origaska_origasca')
+DB_PASS = os.getenv('DB_PASSWORD', 'K(0u9co4G0n)BT')
+DB_HOST = os.getenv('DB_HOST', '67.217.36.136')
+DB_NAME = os.getenv('DB_NAME', 'Origasca-rfid')
 
-engine = create_async_engine(DATABASE_URL, echo=True)  # echo=True para ver logs # Base para modelos SQLAlchemy
+DATABASE_URL = f"mysql+asyncmy://{DB_USER}:{DB_PASS}@{DB_HOST}/{DB_NAME}?charset=utf8mb4"
+
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from sqlalchemy.orm import declarative_base
+
+engine = create_async_engine(DATABASE_URL, echo=True)  # echo=True para logs
 AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False)
-Base = declarative_base()  # Base para modelos SQLAlchemy
+Base = declarative_base()
 
 # Dependency para FastAPI
 async def get_db():
